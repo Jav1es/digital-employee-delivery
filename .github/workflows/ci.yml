@@ -1,0 +1,143 @@
+name: CI
+
+# 本仓库是「交付证据链」仓库：22 个文件里没有可执行代码，
+# 但交付物之间有大量交叉引用，而引用断了 = 证据链断了。
+# 所以 CI 的核心任务是**验证引用完整性**，不是跑测试。
+#
+# 另外两条：敏感信息（PUBLIC 仓库 + 含客户画像）、
+# 以及 README 宣称的数字与交付物内容是否对得上。
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: 证据链完整性
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+
+      - name: 交付物清单完整性
+        run: |
+          # D1-D13 必须齐全（D2 是流程图，共 13 份）
+          miss=""
+          for i in 1 2 3 4 5 6 7 8 9 10 11 12 13; do
+            if ! ls deliverables/D${i}_*.md >/dev/null 2>&1; then
+              miss="$miss D$i"
+            fi
+          done
+          if [ -n "$miss" ]; then
+            echo "::error::缺少交付物:$miss"
+            exit 1
+          fi
+          echo "✅ D1-D13 交付物齐全"
+
+      - name: 内部链接死链检查
+        run: |
+          node -e '
+          const fs = require("fs");
+          const path = require("path");
+
+          function walk(dir, out = []) {
+            for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+              if (e.name === ".git") continue;
+              const p = path.join(dir, e.name);
+              if (e.isDirectory()) walk(p, out);
+              else if (e.name.endsWith(".md")) out.push(p);
+            }
+            return out;
+          }
+
+          let bad = 0, total = 0;
+          for (const f of walk(".")) {
+            const text = fs.readFileSync(f, "utf8");
+            const re = /\[[^\]]*\]\(([^)\s]+)\)/g;
+            let m;
+            while ((m = re.exec(text)) !== null) {
+              const target = m[1].split("#")[0];
+              if (!target) continue;
+              if (/^(https?:|mailto:|tel:)/i.test(target)) continue;
+              total++;
+              const resolved = path.resolve(path.dirname(f), target);
+              if (!fs.existsSync(resolved)) {
+                console.log(`::error file=${f}::死链 ${target}`);
+                bad++;
+              }
+            }
+          }
+          console.log(`检查了 ${total} 个内部链接`);
+          if (bad) process.exit(1);
+          console.log("✅ 无死链");
+          '
+
+      - name: 知识库 CSV 结构
+        run: |
+          node -e '
+          const fs = require("fs");
+          const path = require("path");
+          const dir = "kb";
+          const files = fs.readdirSync(dir).filter(f => f.endsWith(".csv"));
+          if (files.length === 0) {
+            console.log("::error::kb/ 下没有 CSV");
+            process.exit(1);
+          }
+
+          const need = ["doc_id", "collection", "title", "content"];
+          let bad = 0;
+          for (const f of files) {
+            const raw = fs.readFileSync(path.join(dir, f), "utf8").trim();
+            const lines = raw.split("\n");
+            if (lines.length < 2) {
+              console.log(`::error file=kb/${f}::只有表头没有数据`);
+              bad++; continue;
+            }
+            const header = lines[0].split(",").map(s => s.trim().replace(/^"|"$/g, ""));
+            const miss = need.filter(k => !header.includes(k));
+            if (miss.length) {
+              console.log(`::error file=kb/${f}::缺少列 ${miss.join(", ")}`);
+              bad++; continue;
+            }
+            console.log(`✅ ${f}: ${lines.length - 1} 条数据，列完整`);
+          }
+          if (bad) process.exit(1);
+          '
+
+      - name: README 关键数字一致性
+        run: |
+          # README 宣称 52/52 全量通过，交付物 D12 里必须能找到同样的口径。
+          # 这不是验算（原始数据在 D12 里），而是防止 README 数字与证据脱节。
+          if ! grep -q "52/52" README.md; then
+            echo "::error::README 里找不到 52/52 这个核心数字"
+            exit 1
+          fi
+          if ! grep -q "52/52" deliverables/D12_*.md; then
+            echo "::error::D12 里找不到 52/52，README 数字与证据脱节"
+            exit 1
+          fi
+          echo "✅ README 的 52/52 在 D12 里有对应证据"
+
+      - name: 敏感信息扫描
+        run: |
+          # PUBLIC 仓库：不得出现本机绝对路径、凭据、真实客户信息
+          hits=$(grep -rInE 'D:\\Jav1e Flies|C:\\Users\\[A-Za-z0-9_.-]+\\|ghp_[A-Za-z0-9]{20,}|sk-[A-Za-z0-9]{20,}|1d6f3543' \
+                 --exclude-dir=.git . || true)
+          if [ -n "$hits" ]; then
+            echo "::error::发现疑似本机路径或凭据"
+            echo "$hits"
+            exit 1
+          fi
+          echo "✅ 未发现本机路径或凭据"
