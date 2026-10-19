@@ -132,9 +132,10 @@ jobs:
 
       - name: 敏感信息扫描
         run: |
-          # PUBLIC 仓库：不得出现本机绝对路径、凭据、真实客户信息
+          # PUBLIC 仓库：不得出现本机绝对路径、凭据、真实客户信息。
+          # 排除 .github/：本文件自身含检测用的正则字面量，否则会扫到自己。
           hits=$(grep -rInE 'D:\\Jav1e Flies|C:\\Users\\[A-Za-z0-9_.-]+\\|ghp_[A-Za-z0-9]{20,}|sk-[A-Za-z0-9]{20,}|1d6f3543' \
-                 --exclude-dir=.git . || true)
+                 --exclude-dir=.git --exclude-dir=.github . || true)
           if [ -n "$hits" ]; then
             echo "::error::发现疑似本机路径或凭据"
             echo "$hits"
