@@ -1,0 +1,31 @@
+doc_id,collection,title,secret_level,category,content,metadata,version
+kb_faq-031,kb_faq,交期话术,L1,moq_leadtime,"Q：你们的标准交期是多久？能加急吗？
+A：标准交期 15–20 天（收到 30% 定金后起算）；旺季（9–11 月）为 25–30 天。现货款（如 SKU-PC-01、SKU-CB-03、SKU-CH-03）7–10 天可发。加急需要跟单确认产能，不承诺未确认的加急交期。交期以书面确认单为准。
+source：kb_product#12 标准交期说明","{""category"": ""moq_leadtime"", ""doc_version"": ""DOC-0.1""}",DOC-0.1
+kb_faq-032,kb_faq,认证话术,L1,product_param,"Q：你们产品有 CE、FCC 认证吗？能提供证书吗？
+A：有的。充电器（SKU-CH 系列）通过 CE（示例证书号 CE-2025-LVD-0871）与 FCC（示例 FCC ID：2A9ZX-XHCH20W）；数据线与无线充支架通过 CE（示例证书号 CE-2025-EMC-0326）；全部产品线 RoHS 合规（示例报告号 RoHS-2025-Report-0042）。证书可邮件发送脱敏副本。
+source：kb_product#6/#7/#8 认证说明","{""category"": ""product_param"", ""doc_version"": ""DOC-0.1""}",DOC-0.1
+kb_faq-033,kb_faq,样品话术,L1,moq_leadtime,"Q：可以先寄样品吗？样品怎么收费？
+A：可以。样品费按品类收取（手机壳 10 USD/个、数据线 8 USD/条、充电器/车载支架 15 USD/个，示例值），现货样品 3–5 个工作日寄出。正式订单（≥ 1000 件）可返还样品费。默认国际快递到付，与批量订单合并寄送可免运费。
+source：kb_product#11 样品政策","{""category"": ""moq_leadtime"", ""doc_version"": ""DOC-0.1""}",DOC-0.1
+kb_faq-034,kb_faq,物流话术,L1,logistics_payment,"Q：到美国/欧洲海运要多久？可以报 CIF 吗？
+A：海运参考时效：到美西 25–35 天、到欧洲 30–40 天、到中东 20–30 天（示例时效）；空运 5–10 天，国际快递 3–7 天。默认 FOB Guangzhou，可报 EXW/CIF/DDP。具体运费与到港时间由跟单按目的国确认。
+source：kb_product#18 运输方式与时效","{""category"": ""logistics_payment"", ""doc_version"": ""DOC-0.1""}",DOC-0.1
+kb_faq-035,kb_faq,付款话术,L1,logistics_payment,"Q：你们接受什么付款方式？定金比例是多少？
+A：默认 T/T，30% 定金 + 70% 尾款（发货前付清）；单笔 ≥ 10,000 USD 可接受 L/C at sight。小额订单（< 1,000 USD）可协商 100% 预付。具体账户在合同/形式发票中提供。
+source：kb_product#19 付款方式说明","{""category"": ""logistics_payment"", ""doc_version"": ""DOC-0.1""}",DOC-0.1
+kb_faq-036,kb_faq,质保话术,L1,after_sales,"Q：产品坏了能保修吗？质保期多久？
+A：可以。质保期内非人为损坏免费换新：手机壳 90 天、数据线 12 个月、充电器 12 个月、车载支架 6 个月（示例政策）。请提供照片/视频，客服核实后安排补发或换货。
+source：kb_product#15 质保与售后政策","{""category"": ""after_sales"", ""doc_version"": ""DOC-0.1""}",DOC-0.1
+kb_faq-037,kb_faq,定制话术,L1,customization,"Q：可以做 OEM 吗？可以印我们自己的 LOGO 吗？
+A：可以。全系支持 OEM/ODM：LOGO 丝印/UV 印刷、配色、包装定制。定制订单 MOQ 1000 件起；丝印单色 0.05 USD/件（示例）。开模 25–35 天，打样 5–7 天。定制需求请提供设计稿，我们会转业务员对接（定制一律转人工处理）。
+source：kb_product#13/#16 定制交期说明/印刷工艺","{""category"": ""customization"", ""doc_version"": ""DOC-0.1""}",DOC-0.1
+kb_faq-038,kb_faq,退换话术,L1,after_sales,"Q：收到的货有问题，怎么退换？
+A：请在收货后 7 天内报备（质量问题 30 天内），提供照片/视频，客服核实后安排换货或补发（确认后 3–5 个工作日）。质量问题运费由我方承担；定制单不支持无理由退货。
+source：kb_product#20 退换货流程","{""category"": ""after_sales"", ""doc_version"": ""DOC-0.1""}",DOC-0.1
+kb_faq-041,kb_faq,物流时效与运费查询话术,L1,logistics_payment,"Q：帮我查一下到迪拜/洛杉矶的运费和时效？
+A：海运参考时效：广州→美西 25–35 天、→欧洲 30–40 天、→中东 20–30 天（示例时效）；空运 5–10 天；国际快递 3–7 天。运费按目的国、数量与重量计算，不自动报价——请提供品名、数量、目的港，跟单会给你正式运费与报价（转人工处理）。
+source：kb_product#18 运输方式与时效；kb_faq#34 物流话术","{""category"": ""logistics_payment"", ""doc_version"": ""DOC-0.1""}",DOC-0.1
+kb_faq-042,kb_faq,付款方式与到账话术,L1,logistics_payment,"Q：T/T 付款多久到账？接受信用证吗？
+A：T/T 电汇一般 1–3 个工作日到账（以收款行实际为准）；到账确认后安排生产。L/C at sight 可接受，单笔金额须 ≥ 10,000 USD，开证行须为可接受银行。具体以合同/形式发票条款为准。
+source：kb_product#19 付款方式说明；kb_faq#35 付款话术","{""category"": ""logistics_payment"", ""doc_version"": ""DOC-0.1""}",DOC-0.1
